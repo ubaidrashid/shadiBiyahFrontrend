@@ -1,5 +1,4 @@
 import "../Signup/signup.css";
-// import axios from "axios";
 import React, { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 
@@ -16,7 +15,7 @@ const SignUp = () => {
         }
 
         try {
-            const response = await fetch("http://localhost:5000/api/auth/signup", {
+            const response = await fetch(`https://shadi.up.railway.app/api/auth/signup`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -24,15 +23,19 @@ const SignUp = () => {
                 body: JSON.stringify({ username, email, password }),
             });
 
-            const data = await response.json();
+            const text = await response.text();
+            console.log("Response text:", text);
+
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (err) {
+                console.error("Failed to parse JSON:", err);
+            }
+
 
             if (response.ok) {
-                // After successful signup, save user details and token to localStorage
-                localStorage.setItem("user", JSON.stringify(data.user));
-                localStorage.setItem("token", data.token); // Save JWT token
                 console.log("Signup successful", data);
-
-                // Redirect to login page
                 window.location.replace("/login");
             } else {
                 console.error("Error during signup", data.message || data.error);
@@ -43,37 +46,26 @@ const SignUp = () => {
     };
 
     const handleGoogleLogin = async (credentialResponse) => {
-        const token = credentialResponse.credential;  // Google ID token
+        const token = credentialResponse.credential;
 
         try {
             const response = await fetch("http://localhost:5000/api/auth/google", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json", // Required header for JSON request
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ token }), // Send token in JSON format
+                body: JSON.stringify({ token }),
             });
 
             const data = await response.json();
 
-            // Handle response
             if (response.ok) {
-                console.log("Google login successful", data);
+                console.log("Google signup/login successful", data);
+                console.log("Google token: ", token);
+                localStorage.setItem("token", JSON.stringify(data.token)); // or whatever key your backend returns
+                localStorage.setItem("user", JSON.stringify(data.email)); // or whatever key your backend returns
 
-                console.log("User Data to be saved in LocalStorage: ", data.user);
-                console.log("JWT Token to be saved in LocalStorage: ", data.token);
-
-                // Setting the data
-                localStorage.setItem("user", JSON.stringify(data.user));
-                localStorage.setItem("token", data.token);
-
-                // Save user and token to localStorage
-                localStorage.setItem("user", JSON.stringify(data.email));
-                localStorage.setItem("token", data.token); // Save JWT token
-                console.log(data , "==========data");
-
-                // Redirect to home/dashboard after successful login
-                window.location.replace("/home");
+                window.location.replace("/home"); // Only redirect, no localStorage
             } else {
                 console.error("Error logging in with Google", data.message || data.error);
             }
@@ -81,7 +73,6 @@ const SignUp = () => {
             console.error("Error logging in with Google", error);
         }
     };
-
 
     return (
         <div className="form">

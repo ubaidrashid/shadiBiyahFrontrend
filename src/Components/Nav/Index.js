@@ -26,6 +26,7 @@ const Nav = ({ user }) => {
             });
 
             localStorage.removeItem("user");
+            localStorage.removeItem("token");
             window.location.replace("/login");
         } catch (error) {
             console.error("Logout error:", error);
