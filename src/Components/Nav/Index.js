@@ -17,7 +17,7 @@ const Nav = ({ user }) => {
     const LogoutHandler = async () => {
 
         try {
-            await fetch("http://localhost:5000/api/auth/logout", {
+            await fetch("https://shadi.up.railway.app/api/auth/logout", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
