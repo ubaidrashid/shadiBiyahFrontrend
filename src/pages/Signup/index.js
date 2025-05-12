@@ -47,9 +47,11 @@ const SignUp = () => {
 
     const handleGoogleLogin = async (credentialResponse) => {
         const token = credentialResponse.credential;
-
-        try {
-            const response = await fetch("https://shadi.up.railway.app/api/auth/google", {
+                console.log("credentialResponse:", credentialResponse);
+                console.log("credential token:", credentialResponse?.credential);
+                
+                try {
+                    const response = await fetch("https://shadi.up.railway.app/api/auth/google", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -64,8 +66,11 @@ const SignUp = () => {
                 console.log("Google token: ", token);
                 localStorage.setItem("token", JSON.stringify(data.token)); // or whatever key your backend returns
                 localStorage.setItem("user", JSON.stringify(data.email)); // or whatever key your backend returns
+                console.log("token:", token);
 
-                window.location.replace("/home"); // Only redirect, no localStorage
+                // window.location.replace("/home"); // Only redirect, no localStorage
+
+
             } else {
                 console.error("Error logging in with Google", data.message || data.error);
             }
