@@ -68,7 +68,7 @@ const SignUp = () => {
                 localStorage.setItem("user", JSON.stringify(data.email)); // or whatever key your backend returns
                 console.log("token:", token);
 
-                // window.location.replace("/home"); // Only redirect, no localStorage
+                window.location.replace("/home"); // Only redirect, no localStorage
 
 
             } else {
