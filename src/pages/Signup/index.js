@@ -51,7 +51,7 @@ const SignUp = () => {
                 console.log("credential token:", credentialResponse?.credential);
                 
                 try {
-                    const response = await fetch("https://shadi.up.railway.app/api/auth/google", {
+                    const response = await fetch("https://shadi.up.railway.app/api/auth/google/callback", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
